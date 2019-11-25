@@ -33,13 +33,13 @@ void LineDetect::LineDetect_run(){
 }
 
 void LineDetect::LineTrace_run(){
-    if( linestate == LLL )          degree = -27.0 //-16.5;
-    else if( linestate == LL )      degree = -20.0 //-10.0;
-    else if ( linestate == L )      degree = -15.0 //-4.0;
+    if( linestate == LLL )          degree = -20.0; //-16.5;
+    else if( linestate == LL )      degree = -15.0; //-10.0;
+    else if ( linestate == L )      degree = -8.5; //-4.0;
     else if ( linestate == S )      degree = 0.0;
-    else if ( linestate == R )      degree = 15.0 //6.0;
-    else if ( linestate == RR )     degree = 22.0 //12.0;
-    else if ( linestate == RRR )    degree = 28.5 //18.0;
+    else if ( linestate == R )      degree = 8.5; //6.0;
+    else if ( linestate == RR )     degree = 15.0; //12.0;
+    else if ( linestate == RRR )    degree = 20.0; //18.0;
 
     servo.update(degree);
     beforestate = linestate;
