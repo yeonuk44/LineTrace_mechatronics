@@ -43,7 +43,7 @@ int main()
     linedetect.Lineinit();
     
     float dis = 0.0;
-    float goal_speed = 13.0;
+    float goal_speed = 10.0;
     
     while(1) {
         // Every 1 ms,
