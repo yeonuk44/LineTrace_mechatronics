@@ -19,7 +19,7 @@ float LaneSensor::getError()
 
     float errorSum=0;
     int errorCount=0;
-    float errorConstant =22.86;
+    float errorConstant =22.86; //15.0
 
     int sensorIn=sensorsIn_ & sensorsIn_.mask();
     if((sensorIn&0x1)==0x0) {
@@ -29,12 +29,12 @@ float LaneSensor::getError()
     }
     if((sensorIn&0x2)==0x0) {
         ll=true;
-        errorSum+=errorConstant*2.0;
+        errorSum+=errorConstant*2.0;//1.5
         errorCount++;
     }
     if((sensorIn&0x4)==0x0) {
         l=true;
-        errorSum+=errorConstant*0.7;
+        errorSum+=errorConstant*0.7;//0.3
         errorCount++;
     }
     if((sensorIn&0x8)==0x0) {
@@ -44,12 +44,12 @@ float LaneSensor::getError()
     }
     if((sensorIn&0x10)==0x0) {
         r=true;
-        errorSum+=errorConstant*-0.7;
+        errorSum+=errorConstant*-0.7;//-0.3
         errorCount++;
     }
     if((sensorIn&0x20)==0x0) {
         rr=true;
-        errorSum+=errorConstant*-2.0;
+        errorSum+=errorConstant*-2.0;//-1.5
         errorCount++;
     }
     if((sensorIn&0x40)==0x0) {
