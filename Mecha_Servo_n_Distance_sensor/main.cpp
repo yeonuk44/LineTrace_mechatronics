@@ -64,7 +64,7 @@ int main()
         if(pir.getDistance_cm() <= 40)
             motor.setSpeed_percent(0, BACKWARD);
         else 
-            motor.setSpeed_percent(20.0,FORWARD);
+            motor.setSpeed_percent(20.0,FORWARD);// set speed
             
        servo.update(laneSensor.getError()/1.3);
     }
