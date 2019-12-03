@@ -1,29 +1,30 @@
 #include "mbed.h"
-#include "HallSensor.h"
 #include "DistanceSensor.h"
 #include "Plotting.h"
 #include "Motor.h"
 #include "Servo.h"
-#include "LineDetect.h"
+#include "LaneSensor.h"
 
-LineDetect linedetect;
-DistanceSensor pir(p20);
-//Servo servo (p10);
-HallSensor hall (p28);
-Motor motor (p23, p24, p25, p26);
-//LaneSensor laneSensor(p11,p12,p13,p14,p15,p16,p17);
-Serial pc (USBTX, USBRX); // tx, rx
+DistanceSensor pir (p20);
+Servo servo (p10);
+Motor motor(p23,p24,p25,p26);
 Plotting plot;
 
 //Interrupt is generated every 1ms and degree is increased by 1
-unsigned int uiFlag_1ms = 0;
-unsigned int uiFlag_10ms = 0;
+unsigned int uiFlag_50ms = 0;
+
+//To plot with usb, set as below.
+Serial pc(USBTX,USBRX); // Tx, Rx Pin
+
+//Set each gpio to see the output of the hall sensor as a led
+LaneSensor laneSensor(p11,p12,p13,p14,p15,p16,p17);
+
     
 void counter_1ms ()
 {
-    uiFlag_1ms++;
-    uiFlag_10ms++;
+    uiFlag_50ms++;
 }
+
 
 
 // Plot distance sensor
@@ -38,31 +39,44 @@ int main()
     Timer time;
     time.start();
     
-//    float degree = 14.1;
-//    servo.update (0.0);
-    linedetect.Lineinit();
+    //Servo reset
+    float degree = 0.0;
+    //pc.printf("Waiting Request\n");        
     
-    float dis = 0.0;
-    float goal_speed = 13.0;
-    
+    //servo.update (17.2); //1m 반경 
     while(1) {
-        // Every 1 ms,
-        if(uiFlag_1ms >= 1) {
-            uiFlag_1ms = 0;
+        // Every 50 ms,
+        if(uiFlag_50ms>=50) {
+            uiFlag_50ms=0;
             
-            //Set the motor to 10%.
-            motor.setSpeed_percent(goal_speed, BACKWARD);
+           // // clear plotting buffer
+//            plot.reset();
+//            
+//            // put data to buffer
+//            plot.put(pir.getDistance_cm(),0);
+//            
+//            // send buffer
+//            plot.send(&pc);
+//            pc.printf ("Distance %f\r\n", pir.getDistance_cm());
+        }  
+        
+        //AEB
+        if(pir.getDistance_cm() <= 40)
+            motor.setSpeed_percent(0, BACKWARD);
+        else 
+            motor.setSpeed_percent(20.0,FORWARD);
             
-//            servo.update(degree);
-            
-            dis = pir.getDistance_cm();
-            if(dis>6 && dis<30) goal_speed = 0.0;
-        }
-                
-        // Every 10 ms,
-        if(uiFlag_10ms>=10) {
-            linedetect.LineDetect_run();
-            linedetect.LineTrace_run();
-        }
+       servo.update(laneSensor.getError()/1.3);
     }
 }
+
+ //Servo control   
+      //  char c = pc.getc();
+//        
+//        if (c == 'u') degree += 0.1;
+//        else if (c == 'd') degree -= 0.1;
+//            
+//        servo.update (degree);
+//        degree = servo.getDegree();
+//            
+//        pc.printf("Degree: %f\n", servo.getDegree());
