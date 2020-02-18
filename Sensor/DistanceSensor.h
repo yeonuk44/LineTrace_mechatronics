@@ -14,7 +14,6 @@ public:
 
 protected:
     float m_distance;
-    double vol;
     AnalogIn  m_analogIn;
     
 };

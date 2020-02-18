@@ -19,12 +19,12 @@ void Motor::setSpeed_percent(float percent, char direction)
         duty=0.0;
     }
     
-    if(direction==FORWARD) 
+    if(direction==BACKWARD) 
     {
         IN1_=0;
         IN2_=duty;
     } 
-    else if (direction == BACKWARD){
+    else if (direction == FORWARD){
         IN1_=duty;
         IN2_=0;
     }
